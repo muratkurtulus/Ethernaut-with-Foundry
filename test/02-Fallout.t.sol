@@ -37,6 +37,7 @@ contract FalloutTest is Test {
 
         falloutContract.collectAllocations();
         assertEq(address(falloutContract).balance, 0);
+
         //////////////////////
         // LEVEL SUBMISSION //
         //////////////////////
