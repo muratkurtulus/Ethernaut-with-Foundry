@@ -30,12 +30,6 @@ contract CoinflipTest is Test {
         CoinflipAttack attackContract = new CoinflipAttack(levelAddress);
         Coinflip coinflipContract = Coinflip(payable(levelAddress));
 
-        emit log_named_address("level addr", levelAddress);
-        emit log_named_address("attackContract addr", address(attackContract));
-        emit log_named_address(
-            "coinflipContract addr",
-            address(coinflipContract)
-        );
         //////////////////
         // LEVEL ATTACK //
         //////////////////

